@@ -1,0 +1,62 @@
+pipeline {
+    agent any
+
+    environment {
+        APP_NAME = "nextjs-app"
+        APP_DIR  = "/var/www/html"
+        NODE_ENV = "production"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/iam-mahendravarma/Devops-Project-01-Monolithic.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                // Check Node.js and npm versions
+                sh 'node --version'
+                sh 'npm --version'
+                // Clean install to ensure fresh state
+                sh 'rm -rf node_modules package-lock.json'
+                // Install all dependencies including dev dependencies needed for build
+                sh 'npm install'
+                // Explicitly install TypeScript if not present
+                sh 'npm install typescript @types/react @types/node @types/react-dom --save-dev'
+                // Verify TypeScript is installed
+                sh 'npm list typescript'
+                // Also verify node_modules exists and has TypeScript
+                sh 'ls -la node_modules/.bin/tsc'
+            }
+        }
+
+        stage('Build App') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    // Copy build output to /var/www/html (requires sudo)
+                    sh "sudo rsync -a --delete ${WORKSPACE}/ ${APP_DIR}/"
+                    // Restart systemd service
+                    sh "sudo systemctl restart ${APP_NAME}"
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Deployment successful!'
+        }
+        failure {
+            echo '❌ Deployment failed!'
+        }
+    }
+}
