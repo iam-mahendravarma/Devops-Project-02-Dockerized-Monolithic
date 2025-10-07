@@ -11,7 +11,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/iam-mahendravarma/Devops-Project-01-Monolithic.git'
+                git branch: 'main', url: 'https://github.com/iam-mahendravarma/Devops-Project-02-Dockerized-Monolithic.git'
             }
         }
 
