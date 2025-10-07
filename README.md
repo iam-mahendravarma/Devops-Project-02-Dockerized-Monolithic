@@ -1,83 +1,85 @@
-DevOps Project 01 – Monolithic Next.js Web App
+DevOps Project 02 – Dockerized Monolithic Next.js Web App
 
 📌 Project Overview
 
-This project is a monolithic web application built with Next.js.
-The focus is not on complex microservices, but on establishing a DevOps foundation with a CI pipeline using Jenkins.
+This is the second project in my DevOps Project Series.
 
-The pipeline ensures every code change pushed to GitHub is automatically built and tested via GitHub webhook → Jenkins → CI process.
+It takes the monolithic Next.js app from Project 1 and dockerizes it, enabling easy deployment and consistency across environments.
+
+The project uses Docker and Docker Compose to run the Next.js app alongside MongoDB, providing a fully containerized development and production setup.
 
 ⚙️ Tech Stack
 
-Frontend & Backend: Next.js (React Framework)
+    - Frontend & Backend: Next.js (React framework)
 
-Package Manager: npm / yarn
+    - Database: MongoDB
 
-Server: Node.js
+    - Containerization: Docker + Docker Compose
 
-CI/CD Tool: Jenkins
+    - CI Tool: Jenkins (CI integration from Project 1)
 
-Version Control: GitHub
+    - Version Control: GitHub
 
-Features
+🚀 Features
 
-Monolithic Next.js application (single codebase).
+    - Monolithic Next.js web app fully containerized.
 
-Jenkins CI pipeline with:
+    - MongoDB database running in a separate container.
 
-✅ GitHub Webhook integration (SCM polling).
+    - Multi-stage Dockerfile for optimized image size and faster builds.
 
-✅ Code checkout from main branch.
+    - .dockerignore to reduce unnecessary files in the image.
 
-✅ Dependency installation.
+    - Docker Compose orchestration for multi-container setup.
 
-✅ Next.js build process.
+    - Ready for deployment to Docker Hub / Harbor.
 
-✅ Test execution (if available).
+🐳 Docker Setup
 
-Automated pipeline execution on every push/PR.
+1️⃣ Build Docker Image
 
-🛠️ Jenkins CI/CD Setup
+docker-compose build
 
-1️⃣ Prerequisites
+2️⃣ Run Containers
 
-Jenkins installed on server (with Git, Node.js, npm).
+docker-compose up -d
 
-GitHub repository set up with Jenkins.
+3️⃣ Verify
 
-GitHub Webhook created → pointing to Jenkins /github-webhook/ endpoint.
+Next.js app: http://localhost:3000
 
-2️⃣ Jenkins Configuration
+MongoDB container: exposed at localhost:27017
 
-Go to Jenkins Dashboard → New Item → Pipeline.
+4️⃣ Stop Containers
 
-Configure GitHub hook trigger for GITScm polling under Build Triggers.
+docker-compose down
 
-Add pipeline script (Jenkinsfile) from SCM.
+🔧 Commands
 
-▶️ How to Run Locally
+# Build and start containers
 
-# Clone repo
-git clone https://github.com/iam-mahendravarma/Devops-Project-01-Monolithic.git
+docker-compose up -d --build
 
-# Install dependencies
-npm install
+# Check running containers
 
-# Run Dev server
-npm run dev
+docker ps
 
-# Build app
-npm run build
+# Stop containers
 
-# Start production
-npm start
+docker-compose down
 
-📸 Pipeline Flow
+# Push image to Docker Hub
 
-GitHub Push → Webhook Trigger → Jenkins Pipeline → Build  → Result
+docker tag nextjs-app iam-mahendravarma/nextjs-monolith:v2
+
+docker push iam-mahendravarma/nextjs-monolith:v2
 
 👤 Author
 
 Mahendravarma
 
-💻 DevOps Engineer | Jenkins | Docker | Kubernetes | CI/CD | AWS
+💻 DevOps Engineer | Jenkins | Docker | Kubernetes | CI/CD | Cloud
+
+🔗 Related Projects 
+
+Project 1 – https://github.com/iam-mahendravarma/Devops-Project-01-Monolithic.git
