@@ -19,8 +19,8 @@ pipeline {
             steps {
                 sh '''
                     echo "Building Docker image using docker-compose..."
-                    sudo docker-compose down || true
-                    sudo docker-compose up -d --build
+                    docker-compose down || true
+                    docker-compose up -d --build
                 '''
             }
         }
@@ -29,7 +29,7 @@ pipeline {
             steps {
                 sh '''
                     echo "Logging into Docker Hub..."
-                    echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+                    echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                 '''
             }
         }
@@ -40,10 +40,10 @@ pipeline {
                     echo "Tagging and pushing images..."
                     sh """
                         # Tag built image with build number and latest
-                        sudo docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${VERSION_TAG}
+                        docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${VERSION_TAG}
 
                         # Push both tags to Docker Hub
-                        sudo docker push ${IMAGE_NAME}:${VERSION_TAG}
+                        docker push ${IMAGE_NAME}:${VERSION_TAG}
                     """
                 }
             }
@@ -53,8 +53,8 @@ pipeline {
             steps {
                 sh '''
                     echo "Cleaning up..."
-                    sudo docker-compose down
-                    sudo docker system prune -f
+                    docker-compose down
+                    docker system prune -f
                 '''
             }
         }
